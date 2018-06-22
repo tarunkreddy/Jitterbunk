@@ -39,11 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-
-MEDIA_ROOT = '/Users/tarun/code/jitterbunk/bunker/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'bunker/media/')
 MEDIA_URL = '/media/'
-STATIC_ROOT = '/Users/tarun/code/jitterbunk/bunker/static/'
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'bunker/static/')
+STATIC_URL = '/static/'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
