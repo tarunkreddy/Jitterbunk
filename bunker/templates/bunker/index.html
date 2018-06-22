@@ -1,0 +1,12 @@
+<h1>Bunk Log</h1>
+{% if latest_bunks %}
+    <ul>
+    {% for bunk in latest_bunks %}
+        <li>At {{bunk.time}}, <a href="{% url 'bunker:personal' bunk.from_user.id %}">
+{{bunk.from_user.user}}</a> bunked <a href="{% url 'bunker:personal' bunk.to_user.id %}">{{bunk.to_user.user}}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+
+
