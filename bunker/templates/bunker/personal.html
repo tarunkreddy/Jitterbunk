@@ -1,10 +1,17 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'bunker/style.css' %}" />
 <a href="{% url 'bunker:index' %}">Home</a>
 <h1>{{ personal_info.user }}'s Bunks!</h1>
 <img src="{{ personal_info.photo.url }}" height="100" width="100">
 {% if personal_bunks %}
     <ul>
     {% for bunk in personal_bunks %}
-        <li>At {{bunk.time}}, {{bunk.from_user.user}} bunked {{bunk.to_user.user}}</li>
+        {% if bunk.from_user.user == personal_info.user %}
+            <li>At {{bunk.time}}, <span class='currentUser'>{{bunk.from_user.user}}</span> bunked {{bunk.to_user.user}}</li>
+        {% else %}
+            <li>At {{bunk.time}}, {{bunk.from_user.user}} bunked <span class='currentUser'>{{bunk.to_user.user}}</span></li>
+        {% endif %}
     {% endfor %}
     </ul>
 {% else %}
