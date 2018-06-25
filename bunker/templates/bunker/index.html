@@ -5,10 +5,10 @@
 {% if latest_bunks %}
     <ul>
     {% for bunk in latest_bunks %}
-        <li>At {{bunk.time}}, <a href="{% url 'bunker:personal' bunk.from_user.id %}">
+        <li>At {{bunk.time}}, <img src="{{ bunk.from_user.photo.url }}" height="20" width="20"> <a href="{% url 'bunker:personal' bunk.from_user.id %}">
 {{bunk.from_user.user}}</a> bunked
         {% if bunk.from_user != bunk.to_user %}
-            <a href="{% url 'bunker:personal' bunk.to_user.id %}">{{bunk.to_user.user}}</a></li>
+            <img src="{{ bunk.to_user.photo.url }}" height="20" width="20"> <a href="{% url 'bunker:personal' bunk.to_user.id %}">{{bunk.to_user.user}}</a></li>
         {% else %}
             themself
         {% endif %}
