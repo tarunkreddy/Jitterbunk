@@ -15,7 +15,7 @@ from .models import Bunk, UserProfile
 def display_index(request, page_id=None):
     template_name = 'bunker/index.html'
     context_object_name = 'latest_bunks'
-    num_bunks_per_page = 5
+    num_bunks_per_page = 20
     if (page_id):
         start_index = int(page_id) * num_bunks_per_page
         end_index = start_index + num_bunks_per_page
