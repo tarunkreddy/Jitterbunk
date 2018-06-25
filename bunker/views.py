@@ -12,12 +12,27 @@ from .forms import BunkForm
 from .models import Bunk, UserProfile
 
 
-class IndexView(generic.ListView):
+def display_index(request, page_id=None):
     template_name = 'bunker/index.html'
     context_object_name = 'latest_bunks'
+    num_bunks_per_page = 5
+    if (page_id):
+        start_index = int(page_id) * num_bunks_per_page
+        end_index = start_index + num_bunks_per_page
+        next_page = int(page_id) + 1
+        prev_page = int(page_id) - 1
 
-    def get_queryset(self):
-        return Bunk.objects.filter(time__lte=timezone.now()).order_by('-time')[:20]
+    else:
+        start_index = 0
+        end_index = num_bunks_per_page
+        next_page = 1
+        prev_page = -1
+    numBunks = Bunk.objects.count()
+    if (end_index + 1 > numBunks):
+        next_page = -1
+
+    bunks = Bunk.objects.filter(time__lte=timezone.now()).order_by('-time')[start_index:end_index]
+    return render(request, 'bunker/index.html', {'latest_bunks': bunks, 'next_page': next_page, 'prev_page': prev_page})
 
 class PersonalView(generic.DetailView):
     model = UserProfile

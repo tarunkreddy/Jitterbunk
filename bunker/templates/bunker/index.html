@@ -6,9 +6,20 @@
     <ul>
     {% for bunk in latest_bunks %}
         <li>At {{bunk.time}}, <a href="{% url 'bunker:personal' bunk.from_user.id %}">
-{{bunk.from_user.user}}</a> bunked <a href="{% url 'bunker:personal' bunk.to_user.id %}">{{bunk.to_user.user}}</a></li>
+{{bunk.from_user.user}}</a> bunked
+        {% if bunk.from_user != bunk.to_user %}
+            <a href="{% url 'bunker:personal' bunk.to_user.id %}">{{bunk.to_user.user}}</a></li>
+        {% else %}
+            themself
+        {% endif %}
     {% endfor %}
     </ul>
+{% endif %}
+{% if prev_page >= 0 %}
+    <a href="{% url 'bunker:index' prev_page %}">Previous page</a>
+{% endif %}
+{% if next_page >= 0 %}
+    <a href="{% url 'bunker:index' next_page %}">Next page</a>
 {% endif %}
 
 
