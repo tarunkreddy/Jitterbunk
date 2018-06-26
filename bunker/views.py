@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Count, Q
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import get_list_or_404, get_object_or_404, render
+from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
 from django.views import generic
 from django.urls import reverse
 from django.utils import timezone
@@ -50,11 +50,19 @@ class PersonalView(UserPassesTestMixin, generic.DetailView):
         return context
 
     def test_func(self):
-        print str(self.request.user.id) + " " + str(self.kwargs['pk'])
-        return (int(self.request.user.id) == int(self.kwargs['pk']))
+        this_user = UserProfile.objects.get(userprofile=self.request.user.id)
+        return (this_user.id == int(self.kwargs['pk']))
+
+def id_check(user):
+    this_user = UserProfile.objects.get(userprofile=user.id)
+    return (this_user.id == int(self.kwargs['pk']))
+
 
 def send_bunk(request, user_id):
+    approved_user = UserProfile.objects.get(userprofile=request.user.id)
     user = UserProfile.objects.get(id=user_id)
+    if not int(approved_user.id) == int(user_id):
+        return redirect('/login/?next=%s' % request.path)
     if request.method == 'POST':
         form = BunkForm(request.POST)
         if form.is_valid():
@@ -70,6 +78,7 @@ def send_bunk(request, user_id):
         form = BunkForm()
 
     return render(request, 'bunker/bunk.html', {'form': form})
+
 
 def get_stats(request, user_id=None):
     if user_id:
