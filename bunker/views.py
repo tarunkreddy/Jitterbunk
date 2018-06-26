@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Count, Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, render
@@ -36,10 +37,10 @@ def display_index(request, page_id=None):
     if request.user.is_authenticated:
         current_user = UserProfile.objects.get(userprofile=request.user.id)
     else:
-        current_user = ""
+        current_user = None
     return render(request, 'bunker/index.html', {'current_user': current_user, 'latest_bunks': bunks, 'next_page': next_page, 'prev_page': prev_page})
 
-class PersonalView(generic.DetailView):
+class PersonalView(UserPassesTestMixin, generic.DetailView):
     model = UserProfile
     template_name = 'bunker/personal.html'
     context_object_name = 'personal_info'
@@ -47,6 +48,10 @@ class PersonalView(generic.DetailView):
         context = super(PersonalView, self).get_context_data(**kwargs)
         context['personal_bunks'] = Bunk.objects.filter(Q(from_user=context['personal_info']) | Q(to_user=context['personal_info'])).order_by('-time')
         return context
+
+    def test_func(self):
+        print str(self.request.user.id) + " " + str(self.kwargs['pk'])
+        return (int(self.request.user.id) == int(self.kwargs['pk']))
 
 def send_bunk(request, user_id):
     user = UserProfile.objects.get(id=user_id)

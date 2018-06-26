@@ -2,8 +2,9 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'bunker/style.css' %}" />
 <h1>Bunk Log</h1>
-{% if current_user is not "" %}
+{% if current_user%}
     <h3>Welcome {{ current_user.user }}</h3>
+    <a href="{% url 'bunker:personal' current_user.id %}">My profile</a>
 {% endif %}
 {% if latest_bunks %}
     <ul>
@@ -26,7 +27,9 @@
 {% endif %}
 <br>
 <br>
-<a href="/logout/">Logout</a>
+{% if current_user %}
+    <a href="/logout/">Logout</a>
+{% endif %}
 
 
 
