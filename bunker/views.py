@@ -66,10 +66,8 @@ def get_stats(request, user_id=None):
         user = UserProfile.objects.get(id=user_id)
         num_bunks_sent = Bunk.objects.filter(from_user=user).count()
         num_bunks_rcvd = Bunk.objects.filter(to_user=user).count()
-        #usr_bunks_from_q = Count('bunk', filter=Q(bunk__from_user=user))
-        usr_bunks_from = UserProfile.objects.filter(from_user=user).annotate(num_bunks_from=Count('bunk')).order_by('-num_bunks_from')
-        usr_bunks_to_q = Count('bunk', filter=Q(to_user=user))
-        usr_bunks_to = UserProfile.objects.annotate(num_bunks_to=usr_bunks_to_q).order_by('-num_bunks_to')
+        usr_bunks_from = UserProfile.objects.filter(bunk__from_user=user).annotate(num_bunks_from=Count('bunk')).order_by('-num_bunks_from')
+        usr_bunks_to = UserProfile.objects.filter(bunk__to_user=user).annotate(num_bunks_to=Count('bunk')).order_by('-num_bunks_to')
 
     return render(request, 'bunker/stats.html', {'personal_info': user, 'num_bunks_sent': num_bunks_sent, 'num_bunks_rcvd': num_bunks_rcvd,
         'usr_bunks_from': usr_bunks_from, 'usr_bunks_to': usr_bunks_to})

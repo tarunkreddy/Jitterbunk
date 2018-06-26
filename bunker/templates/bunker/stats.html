@@ -4,7 +4,7 @@
 <a href="{% url 'bunker:index' 0 %}">Home</a>
 <h1>{{ personal_info.user }}'s Bunks!</h1>
 <img src="{{ personal_info.photo.url }}" height="100" width="100">
-<h3>Where you are a bunkee</h3>
+<h3>Where you are a bunker</h3>
 {% if usr_bunks_from %}
     <ul>
     {% for user in usr_bunks_from %}
@@ -14,7 +14,7 @@
 {% else %}
     <p>{{personal_info.user}} has not bunked anyone yet.</p>
 {% endif %}
-<h3>Where you are a bunker</h3>
+<h3>Where you are a bunkee</h3>
 {% if usr_bunks_to %}
     <ul>
     {% for user in usr_bunks_to %}
