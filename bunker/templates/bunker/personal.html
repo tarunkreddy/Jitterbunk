@@ -19,4 +19,6 @@
 {% else %}
     <p>{{personal_info.user}} has not bunked anyone yet.</p>
 {% endif %}
+<a href="{% url 'bunker:get-stats' personal_info.id %}">View Stats!</a>
+<br>
 <a href="{% url 'bunker:send-bunk' personal_info.id %}">Bunk Someone!</a>
