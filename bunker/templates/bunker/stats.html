@@ -17,8 +17,8 @@
 <h3>Where you are a bunkee</h3>
 {% if usr_bunks_to %}
     <ul>
-    {% for user in usr_bunks_to %}
-            <li>{{ user.user }} {{ user.num_bunks_to }}</li>
+    {% for usr in usr_bunks_to %}
+            <li>{{ usr.from_user }} {{ usr.num_bunks_to }}</li>
     {% endfor %}
     </ul>
 {% else %}
