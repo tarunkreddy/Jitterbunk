@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, render
@@ -32,7 +33,11 @@ def display_index(request, page_id=None):
         next_page = -1
 
     bunks = Bunk.objects.filter(time__lte=timezone.now()).order_by('-time')[start_index:end_index]
-    return render(request, 'bunker/index.html', {'latest_bunks': bunks, 'next_page': next_page, 'prev_page': prev_page})
+    if request.user.is_authenticated:
+        current_user = UserProfile.objects.get(userprofile=request.user.id)
+    else:
+        current_user = ""
+    return render(request, 'bunker/index.html', {'current_user': current_user, 'latest_bunks': bunks, 'next_page': next_page, 'prev_page': prev_page})
 
 class PersonalView(generic.DetailView):
     model = UserProfile

@@ -43,6 +43,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'bunker/media/')
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'bunker/static/')
 STATIC_URL = '/static/'
+LOGIN_URL= '/login/'
+LOGIN_REDIRECT_URL = '/bunker/'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
