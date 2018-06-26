@@ -1,0 +1,27 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'bunker/style.css' %}" />
+<a href="{% url 'bunker:index' 0 %}">Home</a>
+<h1>{{ personal_info.user }}'s Bunks!</h1>
+<img src="{{ personal_info.photo.url }}" height="100" width="100">
+<h3>Where you are a bunkee</h3>
+{% if usr_bunks_from %}
+    <ul>
+    {% for user in usr_bunks_from %}
+            <li>{{ user.user }} {{ user.num_bunks_from }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>{{personal_info.user}} has not bunked anyone yet.</p>
+{% endif %}
+<h3>Where you are a bunker</h3>
+{% if usr_bunks_to %}
+    <ul>
+    {% for user in usr_bunks_to %}
+            <li>{{ user.user }} {{ user.num_bunks_to }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>{{personal_info.user}} has not bunked anyone yet.</p>
+{% endif %}
+<a href="{% url 'bunker:send-bunk' personal_info.id %}">Bunk Someone!</a>

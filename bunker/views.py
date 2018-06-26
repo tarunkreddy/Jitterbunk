@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 from django.views import generic
@@ -61,7 +61,17 @@ def send_bunk(request, user_id):
 
     return render(request, 'bunker/bunk.html', {'form': form})
 
-def bunk_submitted(request):
-    return HttpResponse("Success!")
+def get_stats(request, user_id=None):
+    if user_id:
+        user = UserProfile.objects.get(id=user_id)
+        num_bunks_sent = Bunk.objects.filter(from_user=user).count()
+        num_bunks_rcvd = Bunk.objects.filter(to_user=user).count()
+        #usr_bunks_from_q = Count('bunk', filter=Q(bunk__from_user=user))
+        usr_bunks_from = UserProfile.objects.filter(from_user=user).annotate(num_bunks_from=Count('bunk')).order_by('-num_bunks_from')
+        usr_bunks_to_q = Count('bunk', filter=Q(to_user=user))
+        usr_bunks_to = UserProfile.objects.annotate(num_bunks_to=usr_bunks_to_q).order_by('-num_bunks_to')
+
+    return render(request, 'bunker/stats.html', {'personal_info': user, 'num_bunks_sent': num_bunks_sent, 'num_bunks_rcvd': num_bunks_rcvd,
+        'usr_bunks_from': usr_bunks_from, 'usr_bunks_to': usr_bunks_to})
 
 
